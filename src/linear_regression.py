@@ -59,6 +59,6 @@ plt.ylabel("Predicted Quality")
 plt.title("Linear Regression Result")
 
 # wine-analysis直下に保存
-plt.savefig("../linear_regression_result.png")
+plt.savefig("linear_regression_result.png")
 
 plt.show()

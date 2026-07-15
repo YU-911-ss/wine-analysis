@@ -9,8 +9,8 @@ from sklearn.metrics import mean_squared_error, r2_score
 df = pd.read_csv("data/wine.csv")
 
 # 説明変数(X)と目的変数(y)
-X = df.drop("quality", axis=1)
-y = df["quality"]
+X = df[["alcohol"]]     # 説明変数
+y = df["quality"]       # 目的変数
 
 # 学習データとテストデータに分割
 X_train, X_test, y_train, y_test = train_test_split(
@@ -31,32 +31,31 @@ mse = mean_squared_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
 print("=== 線形回帰結果 ===")
+print(f"回帰式：quality = {model.coef_[0]:.3f} × alcohol + {model.intercept_:.3f}")
 print(f"平均二乗誤差(MSE)：{mse:.3f}")
 print(f"決定係数(R²)：{r2:.3f}")
 
-print("\n各説明変数の係数")
-for name, coef in zip(X.columns, model.coef_):
-    print(f"{name:25s}: {coef:.4f}")
-
-print(f"\n切片：{model.intercept_:.4f}")
-
-# ------------------------
+# -----------------------------
 # グラフ作成
-# ------------------------
-plt.figure(figsize=(6,6))
-plt.scatter(y_test, y_pred, alpha=0.7)
+# -----------------------------
 
-# 理想線
-plt.plot(
-    [y_test.min(), y_test.max()],
-    [y_test.min(), y_test.max()],
-    color="red",
-    linewidth=2
-)
+plt.figure(figsize=(8,6))
 
-plt.xlabel("Actual Quality")
-plt.ylabel("Predicted Quality")
-plt.title("Linear Regression Result")
+# 散布図
+plt.scatter(X_test["alcohol"], y_test,
+            color="blue", alpha=0.7, label="Actual Data")
+
+# 回帰直線
+X_sorted = X_test.sort_values(by="alcohol")
+y_line = model.predict(X_sorted)
+
+plt.plot(X_sorted["alcohol"], y_line,
+         color="red", linewidth=2, label="Regression Line")
+
+plt.xlabel("Alcohol")
+plt.ylabel("Quality")
+plt.title("Linear Regression (Alcohol vs Quality)")
+plt.legend()
 
 # wine-analysis直下に保存
 plt.savefig("linear_regression_result.png")

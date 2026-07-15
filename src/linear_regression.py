@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
 # データの読み込み
-df = pd.read_csv("../data/wine.csv")
+df = pd.read_csv("data/wine.csv")
 
 # 説明変数(X)と目的変数(y)
 X = df.drop("quality", axis=1)
